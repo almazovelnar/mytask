@@ -13,6 +13,7 @@ var app = new Vue({
 		amount: null,
 		likes: null,
 		postLikes: 0,
+		commentLikes: 0,
 		balance: null,
 		commentText: '',
 		packs: [
@@ -120,6 +121,20 @@ var app = new Vue({
 					if (response.data.status === 'success') {
 						self.likes = response.data.likes;
 						self.postLikes = response.data.post.likes;
+					}
+				})
+
+		},
+		addCommentLike: function (id) {
+			var self = this;
+			axios
+				.post('/main_page/comment_like', {
+					id: id
+				})
+				.then(function (response) {
+					if (response.data.status === 'success') {
+						self.post = response.data.post,
+						self.likes = response.data.likes
 					}
 				})
 

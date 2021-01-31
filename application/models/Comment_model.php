@@ -22,7 +22,7 @@ class Comment_model extends CI_Emerald_Model
     /** @var int */
     protected $user_id;
     /** @var int */
-    protected $assing_id;
+    protected $assign_id;
     /** @var string */
     protected $text;
 
@@ -59,9 +59,9 @@ class Comment_model extends CI_Emerald_Model
     /**
      * @return int
      */
-    public function get_assing_id(): int
+    public function get_assign_id(): int
     {
-        return $this->assing_id;
+        return $this->assign_id;
     }
 
     /**
@@ -69,10 +69,10 @@ class Comment_model extends CI_Emerald_Model
      *
      * @return bool
      */
-    public function set_assing_id(int $assing_id)
+    public function set_assign_id(int $assign_id)
     {
-        $this->assing_id = $assing_id;
-        return $this->save('assing_id', $assing_id);
+        $this->assign_id = $assign_id;
+        return $this->save('assign_id', $assign_id);
     }
 
 
@@ -246,7 +246,7 @@ class Comment_model extends CI_Emerald_Model
 
             $o->user = User_model::preparation($d->get_user(),'main_page');
 
-            $o->likes = rand(0, 25);
+            $o->likes = $d->get_likes();
 
             $o->time_created = $d->get_time_created();
             $o->time_updated = $d->get_time_updated();
@@ -258,5 +258,12 @@ class Comment_model extends CI_Emerald_Model
         return $ret;
     }
 
+    public function like($like = 1)
+    {
+        $this->likes += $like;
+        $this->save('likes', $this->likes);
+
+        return $this->get_likes();
+    }
 
 }

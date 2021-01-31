@@ -1,6 +1,6 @@
 <?php
 
-use Model\{Boosterpack_model, Login_model, Post_model, User_model};
+use Model\{Boosterpack_model, Comment_model, Login_model, Post_model, User_model};
 
 /**
  * Class Main_page
@@ -168,6 +168,38 @@ class Main_page extends MY_Controller
             $likes = $user->minusFromLikes($like);
 
         $posts =  Post_model::preparation($post, 'full_info');
+
+        return $this->response_success([
+            'post' => $posts,
+            'likes' => $likes ?? 0
+        ]);
+    }
+
+    public function comment_like(){
+        if (!User_model::is_logged())
+            return $this->response_error(CI_Core::RESPONSE_GENERIC_NEED_AUTH);
+
+        $like = 1;
+        $user = User_model::get_user();
+        if ($user->getLikes() - $like < 0)
+            return $this->response_error(CI_Core::RESPONSE_LIKES_NOT_ENOUGH);
+
+        $data = json_decode(file_get_contents('php://input'));
+        $commentId = intval($data->id);
+
+        if (empty($commentId))
+            return $this->response_error(CI_Core::RESPONSE_GENERIC_WRONG_PARAMS);
+
+        try {
+            $comment = new Comment_model($commentId);
+        } catch (EmeraldModelNoDataException $ex){
+            return $this->response_error(CI_Core::RESPONSE_GENERIC_NO_DATA);
+        }
+
+        if ($comment->like($like))
+            $likes = $user->minusFromLikes($like);
+
+        $posts =  Post_model::preparation(new Post_model($comment->get_assign_id()), 'full_info');
 
         return $this->response_success([
             'post' => $posts,
