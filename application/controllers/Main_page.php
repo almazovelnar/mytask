@@ -84,31 +84,31 @@ class Main_page extends MY_Controller
     }
 
 
-    public function login($user_id)
+    public function login()
     {
-        // Right now for tests we use from contriller
-        $login = App::get_ci()->input->post('login');
-        $password = App::get_ci()->input->post('password');
+        $data = json_decode(file_get_contents('php://input'));
 
-        if (empty($login) || empty($password)){
+        if (empty($data->login) || empty($data->password))
             return $this->response_error(CI_Core::RESPONSE_GENERIC_WRONG_PARAMS);
+
+        if (($user = User_model::getByEmail($data->login)) !== null) {
+            if (Login_model::validatePassword($user, $data->password)) {
+                Login_model::start_session($user);
+            } else {
+                return $this->response_error('User not Found');
+            }
+        } else {
+            return $this->response_error('User not Found');
         }
 
-        // But data from modal window sent by POST request.  App::get_ci()->input...  to get it.
-
-
-        //Todo: 1 st task - Authorisation.
-
-        Login_model::start_session($user_id);
-
-        return $this->response_success(['user' => $user_id]);
+        return $this->response_success(['user' => $user->get_id()]);
     }
 
 
     public function logout()
     {
         Login_model::logout();
-        redirect(site_url('/'));
+        redirect(site_url('/', 'http'));
     }
 
     public function add_money(){

@@ -7,6 +7,7 @@ var app = new Vue({
 		invalidLogin: false,
 		invalidPass: false,
 		invalidSum: false,
+		userNotFound: false,
 		posts: [],
 		addSum: 0,
 		amount: 0,
@@ -62,9 +63,16 @@ var app = new Vue({
 					password: self.pass
 				})
 					.then(function (response) {
-						setTimeout(function () {
-							$('#loginModal').modal('hide');
-						}, 500);
+						if (response.data.status === 'success') {
+							setTimeout(function () {
+								$('#loginModal').modal('hide');
+								setTimeout(function () {
+									location.reload()
+								}, 500);
+							}, 300);
+						} else {
+							self.userNotFound = true
+						}
 					})
 			}
 		},
