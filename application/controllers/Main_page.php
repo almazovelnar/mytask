@@ -114,7 +114,6 @@ class Main_page extends MY_Controller
         $amount = doubleval($data->sum);
 
         $user = User_model::get_user();
-        $user->addToRefilled($amount);
         $balance = $user->addToBalance($amount);
 
         return $this->response_success(['amount' => $balance]);
@@ -127,8 +126,37 @@ class Main_page extends MY_Controller
 
 
     public function like(){
-        // todo: 3rd task add like post\comment logic
-        return $this->response_success(['likes' => rand(1,55)]); // Кол-во лайков под постом \ комментарием чтобы обновить . Сейчас рандомная заглушка
+        if (!User_model::is_logged())
+            return $this->response_error(CI_Core::RESPONSE_GENERIC_NEED_AUTH);
+
+        $likes = 1;
+        $user = User_model::get_user();
+        if ($user->get_wallet_balance() - $likes < 0)
+            return $this->response_error(CI_Core::RESPONSE_BALANCE_NOT_ENOUGH);
+
+        $data = json_decode(file_get_contents('php://input'));
+        $postId = intval($data->id);
+
+        if (empty($postId))
+            return $this->response_error(CI_Core::RESPONSE_GENERIC_WRONG_PARAMS);
+
+        try {
+            $post = new Post_model($postId);
+        } catch (EmeraldModelNoDataException $ex){
+            return $this->response_error(CI_Core::RESPONSE_GENERIC_NO_DATA);
+        }
+
+
+        if ($post->like($likes))
+            $balance = $user->minusFromBalance($likes);
+
+        $posts =  Post_model::preparation($post, 'full_info');
+
+
+        return $this->response_success([
+            'post' => $posts,
+            'balance' => $balance ?? 0
+        ]);
     }
 
 }

@@ -12,6 +12,7 @@ var app = new Vue({
 		addSum: 1,
 		amount: 0,
 		likes: 0,
+		balance: 0,
 		commentText: '',
 		packs: [
 			{
@@ -110,11 +111,16 @@ var app = new Vue({
 				})
 		},
 		addLike: function (id) {
-			var self= this;
+			var self = this;
 			axios
-				.get('/main_page/like')
+				.post('/main_page/like', {
+					id: id
+				})
 				.then(function (response) {
-					self.likes = response.data.likes;
+					if (response.data.status === 'success') {
+						self.balance = response.data.balance;
+						self.likes = response.data.post.likes;
+					}
 				})
 
 		},
