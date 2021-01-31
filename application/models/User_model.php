@@ -382,4 +382,13 @@ class User_model extends CI_Emerald_Model {
         return $o;
     }
 
+    public static function getByEmail(string $email)
+    {
+        if (($user = App::get_ci()->s->from(self::CLASS_TABLE)
+            ->where(['email' => $email])
+            ->one()) !== null)
+            return new User_model($user);
+
+        return $user;
+    }
 }
