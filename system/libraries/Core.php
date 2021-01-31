@@ -24,6 +24,7 @@ class CI_Core {
     // ACTION | REQUEST ASSIGNED
     const RESPONSE_GENERIC_INTERNAL_ERROR = 'internal_error'; // Если у нас excpetion выбил чтото . в info пишем инфу по ошибке.
     const RESPONSE_GENERIC_NEED_AUTH = 'need_auth'; // Если надо авторизоваться
+    const RESPONSE_BALANCE_NOT_ENOUGH = 'need_balance'; // Недостаточно баланса
 
 
     const RESPONSE_GENERIC_DISABLED = 'disabled'; // Фунционал отключен или временно не доступен - через сеттинги выключили

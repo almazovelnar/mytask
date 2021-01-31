@@ -39,6 +39,9 @@ class User_model extends CI_Emerald_Model {
     protected $time_created;
     /** @var string */
     protected $time_updated;
+    /** @var integer */
+    protected $likes;
+
 
 
     private static $_current_user;
@@ -393,17 +396,40 @@ class User_model extends CI_Emerald_Model {
         return $user;
     }
 
-    public function addToBalance(float $amount): float
+    public function addToBalance(float $amount)
     {
         $this->wallet_balance += $amount;
-        $this->save('wallet_balance', $this->wallet_balance);
-        return $this->get_wallet_balance();
+        $this->wallet_total_refilled += $amount;
+        if ($this->save('wallet_balance', $this->wallet_balance)) {
+            $this->save('wallet_total_refilled', $this->wallet_total_refilled);
+        }
+
+        return number_format($this->get_wallet_balance(), 2);
     }
 
-    public function addToRefilled(float $amount): float
+    public function minusFromBalance(float $amount)
     {
-        $this->wallet_total_refilled += $amount;
-        $this->save('wallet_total_refilled', $this->wallet_total_refilled);
-        return $this->get_wallet_total_refilled();
+        $this->wallet_balance -= $amount;
+        $this->wallet_total_withdrawn += $amount;
+        $this->save('wallet_balance', $this->wallet_balance);
+        $this->save('wallet_total_withdrawn', $this->wallet_total_withdrawn);
+
+        return number_format($this->get_wallet_balance(), 2);
+    }
+
+    /**
+     * @return int
+     */
+    public function getLikes(): int
+    {
+        return $this->likes;
+    }
+
+    /**
+     * @param int $likes
+     */
+    public function setLikes(int $likes)
+    {
+        $this->likes = $likes;
     }
 }

@@ -49,28 +49,12 @@ use Model\User_model;
                     <svg style="position:relative; top: -1.5px;" class="bi bi-heart-fill" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                       <path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z" clip-rule="evenodd"/>
                     </svg>
-                  <?= $user->balance ?>
+                      <span v-if="!balance"><?= $user->balance ?></span>
+                      <span v-else>{{balance}}</span>
               </span>
             <?php }?>
         </li>
       </div>
-<!--      <div class="collapse navbar-collapse" id="navbarTogglerDemo01">-->
-<!--        <li class="nav-item">-->
-<!--            --><?// if (User_model::is_logged()) {?>
-<!--              <button type="button" class="btn btn-primary my-2 my-sm-0" type="submit" data-toggle="modal"-->
-<!--                      data-target="#loginModal">Log in-->
-<!--              </button>-->
-<!--            --><?// } else {?>
-<!--              <button type="button" class="btn btn-danger my-2 my-sm-0" href="/logout">Log out-->
-<!--              </button>-->
-<!--            --><?// } ?>
-<!--        </li>-->
-<!--        <li class="nav-item">-->
-<!--          <button type="button" class="btn btn-success my-2 my-sm-0" type="submit" data-toggle="modal"-->
-<!--                  data-target="#addModal">Add balance-->
-<!--          </button>-->
-<!--        </li>-->
-<!--      </div>-->
     </nav>
   </div>
   <div class="main">
