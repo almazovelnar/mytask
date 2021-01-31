@@ -75,10 +75,10 @@ $query_builder = TRUE;
 
 $db['default'] = array(
     'dsn' => '',
-    'hostname' => '127.0.0.1',
-    'username' => 'root',
-    'password' => '1234',
-    'database' => 'test_task',
+    'hostname' => 'db', // 127.0.0.1
+    'username' => 'task_db', //root
+    'password' => 'task_db', //1234
+    'database' => 'task_db', //test_task
     'dbdriver' => 'mysqli',
     'dbprefix' => '',
     'pconnect' => FALSE,
