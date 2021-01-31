@@ -2,10 +2,6 @@
 
 use Model\User_model;
 
-/**
- * @var User_model $user
- */
-
 ?>
 <!doctype html>
 <html lang="en">
@@ -45,12 +41,16 @@ use Model\User_model;
               <button type="button" class="btn btn-success my-2 my-sm-0" type="submit" data-toggle="modal"
                       data-target="#addModal">Add balance
               </button>
-              <span style="color:#fff;margin-left: 30px;">
-                    <svg style="position:relative; top: -1.5px;" class="bi bi-heart-fill" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                      <path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z" clip-rule="evenodd"/>
-                    </svg>
-                      <span v-if="!balance"><?= $user->balance ?></span>
-                      <span v-else>{{balance}}</span>
+              <span style="color:#fff;">
+                      <span style="margin-left: 30px;">Balance: </span>
+                      <span v-if="balance === null"><?= "$" . $user->balance ?></span>
+                      <span v-else>${{balance}}</span>
+
+                        <svg style="position:relative; top: -1.5px; margin-left: 10px;" class="bi bi-heart-fill" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                          <path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z" clip-rule="evenodd"/>
+                        </svg>
+                      <span v-if="likes === null"><?= $user->likes ?></span>
+                      <span v-else>{{likes}}</span>
               </span>
             <?php }?>
         </li>
@@ -162,7 +162,7 @@ use Model\User_model;
             <div class="post-img" v-bind:style="{ backgroundImage: 'url(' + post.img + ')' }"></div>
             <div class="card-body">
               <div class="likes" @click="addLike(post.id)">
-                <div class="heart-wrap" v-if="!likes">
+                <div class="heart-wrap" v-if="!postLikes">
                   <div class="heart">
                     <svg class="bi bi-heart" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                       <path fill-rule="evenodd" d="M8 2.748l-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01L8 2.748zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 01.176-.17C12.72-3.042 23.333 4.867 8 15z" clip-rule="evenodd"/>
@@ -176,7 +176,7 @@ use Model\User_model;
                       <path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z" clip-rule="evenodd"/>
                     </svg>
                   </div>
-                  <span>{{likes}}</span>
+                  <span>{{postLikes}}</span>
                 </div>
               </div>
               <p class="card-text" v-for="comment in post.coments" >

@@ -10,9 +10,10 @@ var app = new Vue({
 		userNotFound: false,
 		posts: [],
 		addSum: 1,
-		amount: 0,
-		likes: 0,
-		balance: 0,
+		amount: null,
+		likes: null,
+		postLikes: 0,
+		balance: null,
 		commentText: '',
 		packs: [
 			{
@@ -101,7 +102,6 @@ var app = new Vue({
 			axios
 				.get('/main_page/get_post/' + id)
 				.then(function (response) {
-					console.log(response)
 					self.post = response.data.post;
 					if(self.post){
 						setTimeout(function () {
@@ -118,8 +118,8 @@ var app = new Vue({
 				})
 				.then(function (response) {
 					if (response.data.status === 'success') {
-						self.balance = response.data.balance;
-						self.likes = response.data.post.likes;
+						self.likes = response.data.likes;
+						self.postLikes = response.data.post.likes;
 					}
 				})
 
@@ -130,8 +130,11 @@ var app = new Vue({
 				id: id,
 			})
 				.then(function (response) {
-					self.amount = response.data.amount
-					if(self.amount !== 0){
+					if(response.data.status === 'success'){
+						self.amount = response.data.amount
+						self.likes = response.data.likes
+						self.balance = response.data.balance
+
 						setTimeout(function () {
 							$('#amountModal').modal('show');
 						}, 500);

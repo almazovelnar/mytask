@@ -16,7 +16,6 @@ use CI_Emerald_Model;
 class User_model extends CI_Emerald_Model {
     const CLASS_TABLE = 'user';
 
-
     /** @var string */
     protected $email;
     /** @var string */
@@ -41,7 +40,6 @@ class User_model extends CI_Emerald_Model {
     protected $time_updated;
     /** @var integer */
     protected $likes;
-
 
 
     private static $_current_user;
@@ -381,6 +379,7 @@ class User_model extends CI_Emerald_Model {
             $o->time_created = $data->get_time_created();
             $o->time_updated = $data->get_time_updated();
             $o->balance = number_format($data->get_wallet_balance(), 2);
+            $o->likes = $data->getLikes();
         }
 
         return $o;
@@ -415,6 +414,22 @@ class User_model extends CI_Emerald_Model {
         $this->save('wallet_total_withdrawn', $this->wallet_total_withdrawn);
 
         return number_format($this->get_wallet_balance(), 2);
+    }
+
+    public function minusFromLikes($like = 1)
+    {
+        $this->likes -= $like;
+        $this->save('likes', $this->likes);
+
+        return $this->getLikes();
+    }
+
+    public function addToLikes($like = 1)
+    {
+        $this->likes += $like;
+        $this->save('likes', $this->likes);
+
+        return $this->getLikes();
     }
 
     /**

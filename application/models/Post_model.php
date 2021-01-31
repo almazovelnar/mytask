@@ -299,9 +299,9 @@ class Post_model extends CI_Emerald_Model {
         return $o;
     }
 
-    public function like(int $likes)
+    public function like($like = 1)
     {
-        $this->likes += $likes;
+        $this->likes += $like;
         $this->save('likes', $this->likes);
 
         return $this->get_likes();
