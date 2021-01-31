@@ -1,14 +1,9 @@
 <?php
 
-use Model\Login_model;
-use Model\Post_model;
-use Model\User_model;
+use Model\{Login_model, Post_model, User_model};
 
 /**
- * Created by PhpStorm.
- * User: mr.incognito
- * Date: 10.11.2018
- * Time: 21:36
+ * Class Main_page
  */
 class Main_page extends MY_Controller
 {
@@ -36,48 +31,47 @@ class Main_page extends MY_Controller
         return $this->response_success(['posts' => $posts]);
     }
 
-    public function get_post($post_id){ // or can be $this->input->post('news_id') , but better for GET REQUEST USE THIS
-
+    public function get_post($post_id)
+    { // or can be $this->input->post('news_id') , but better for GET REQUEST USE THIS
         $post_id = intval($post_id);
 
-        if (empty($post_id)){
+        if (empty($post_id))
             return $this->response_error(CI_Core::RESPONSE_GENERIC_WRONG_PARAMS);
-        }
 
-        try
-        {
+        try {
             $post = new Post_model($post_id);
-        } catch (EmeraldModelNoDataException $ex){
+        } catch (EmeraldModelNoDataException $ex) {
             return $this->response_error(CI_Core::RESPONSE_GENERIC_NO_DATA);
         }
 
-
         $posts =  Post_model::preparation($post, 'full_info');
+
         return $this->response_success(['post' => $posts]);
     }
 
 
-    public function comment($post_id,$message){ // or can be App::get_ci()->input->post('news_id') , but better for GET REQUEST USE THIS ( tests )
+    public function comment()
+    { // or can be App::get_ci()->input->post('news_id') , but better for GET REQUEST USE THIS ( tests )
 
-        if (!User_model::is_logged()){
+        if (!User_model::is_logged())
             return $this->response_error(CI_Core::RESPONSE_GENERIC_NEED_AUTH);
-        }
 
-        $post_id = intval($post_id);
+        $data = json_decode(file_get_contents('php://input'));
 
-        if (empty($post_id) || empty($message)){
+        $postId = intval($data->id);
+        $message = $data->commentText;
+
+        if (empty($postId) || empty($message)){
             return $this->response_error(CI_Core::RESPONSE_GENERIC_WRONG_PARAMS);
         }
 
-        try
-        {
-            $post = new Post_model($post_id);
+        try {
+            $post = new Post_model($postId);
         } catch (EmeraldModelNoDataException $ex){
             return $this->response_error(CI_Core::RESPONSE_GENERIC_NO_DATA);
         }
 
-        // Todo: 2 nd task Comment
-        $post->comment();
+        $comment = $post->comment(User_model::get_user()->get_id(), $postId, $message);
 
         $posts =  Post_model::preparation($post, 'full_info');
         return $this->response_success(['post' => $posts]);
@@ -113,18 +107,18 @@ class Main_page extends MY_Controller
 
     public function add_money(){
         // todo: 4th task  add money to user logic
-        return $this->response_success(['amount' => rand(1,55)]); // Колво лайков под постом \ комментарием чтобы обновить . Сейчас рандомная заглушка
+        return $this->response_success(['amount' => rand(1,55)]); // Кол-во лайков под постом \ комментарием чтобы обновить . Сейчас рандомная заглушка
     }
 
     public function buy_boosterpack(){
         // todo: 5th task add money to user logic
-        return $this->response_success(['amount' => rand(1,55)]); // Колво лайков под постом \ комментарием чтобы обновить . Сейчас рандомная заглушка
+        return $this->response_success(['amount' => rand(1,55)]); // Кол-во лайков под постом \ комментарием чтобы обновить . Сейчас рандомная заглушка
     }
 
 
     public function like(){
         // todo: 3rd task add like post\comment logic
-        return $this->response_success(['likes' => rand(1,55)]); // Колво лайков под постом \ комментарием чтобы обновить . Сейчас рандомная заглушка
+        return $this->response_success(['likes' => rand(1,55)]); // Кол-во лайков под постом \ комментарием чтобы обновить . Сейчас рандомная заглушка
     }
 
 }

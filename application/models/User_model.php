@@ -3,9 +3,9 @@
 namespace Model;
 
 use App;
-use CI_Emerald_Model;
-use Exception;
 use stdClass;
+use Exception;
+use CI_Emerald_Model;
 
 /**
  * Created by PhpStorm.

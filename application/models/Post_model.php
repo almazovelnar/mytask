@@ -1,11 +1,11 @@
 <?php
 
 namespace Model;
+
 use App;
-use CI_Emerald_Model;
-use Comment_model;
-use Exception;
 use stdClass;
+use Exception;
+use CI_Emerald_Model;
 
 /**
  * Created by PhpStorm.
@@ -202,8 +202,12 @@ class Post_model extends CI_Emerald_Model {
         return (App::get_ci()->s->get_affected_rows() > 0);
     }
 
-    public function comment(){
+    public function comment(int $userId, int $postId, string $message, ?int $parentId = 0)
+    {
+        App::get_ci()->s->from(Comment_model::CLASS_TABLE)
+            ->insert(['user_id' => $userId, 'assign_id' => $postId, 'text' => $message, 'parent_id' => $parentId])->execute();
 
+        return new static(App::get_ci()->s->get_insert_id());
     }
 
     /**
@@ -279,18 +283,12 @@ class Post_model extends CI_Emerald_Model {
     {
         $o = new stdClass();
 
-
         $o->id = $data->get_id();
         $o->img = $data->get_img();
 
-
-//            var_dump($d->get_user()->object_beautify()); die();
-
         $o->user = User_model::preparation($data->get_user(), 'main_page');
         $o->coments = Comment_model::preparation($data->get_comments(), 'full_info');
-
         $o->likes = rand(0, 25);
-
 
         $o->time_created = $data->get_time_created();
         $o->time_updated = $data->get_time_updated();
