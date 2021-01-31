@@ -106,13 +106,23 @@ class Main_page extends MY_Controller
     }
 
     public function add_money(){
-        // todo: 4th task  add money to user logic
-        return $this->response_success(['amount' => rand(1,55)]); // Кол-во лайков под постом \ комментарием чтобы обновить . Сейчас рандомная заглушка
+        if (!User_model::is_logged())
+            return $this->response_error(CI_Core::RESPONSE_GENERIC_NEED_AUTH);
+
+        $data = json_decode(file_get_contents('php://input'));
+
+        $amount = doubleval($data->sum);
+
+        $user = User_model::get_user();
+        $user->addToRefilled($amount);
+        $balance = $user->addToBalance($amount);
+
+        return $this->response_success(['amount' => $balance]);
     }
 
     public function buy_boosterpack(){
         // todo: 5th task add money to user logic
-        return $this->response_success(['amount' => rand(1,55)]); // Кол-во лайков под постом \ комментарием чтобы обновить . Сейчас рандомная заглушка
+        return $this->response_success(['amount' => rand(1,55)]);
     }
 
 

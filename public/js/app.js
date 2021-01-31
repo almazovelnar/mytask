@@ -9,7 +9,7 @@ var app = new Vue({
 		invalidSum: false,
 		userNotFound: false,
 		posts: [],
-		addSum: 0,
+		addSum: 1,
 		amount: 0,
 		likes: 0,
 		commentText: '',
@@ -76,12 +76,11 @@ var app = new Vue({
 					})
 			}
 		},
-		fiilIn: function () {
-			var self= this;
+		fillIn: function () {
+			var self = this;
 			if(self.addSum === 0){
 				self.invalidSum = true
-			}
-			else{
+			} else{
 				self.invalidSum = false
 				axios.post('/main_page/add_money', {
 					sum: self.addSum,
@@ -89,7 +88,10 @@ var app = new Vue({
 					.then(function (response) {
 						setTimeout(function () {
 							$('#addModal').modal('hide');
-						}, 500);
+							setTimeout(function () {
+								location.reload()
+							}, 500);
+						}, 300);
 					})
 			}
 		},
