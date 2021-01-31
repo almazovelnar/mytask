@@ -58,25 +58,20 @@ class CI_Emerald_Model {
     public function set_id($id = NULL, bool $for_update = FALSE)
     {
         $this->is_sparrow_loaded();
-        if ((int)$id > 0)
-        {
-            if ($for_update)
-            {
+        if ((int)$id > 0) {
+            if ($for_update) {
                 $this->data = App::get_ci()->s->from($this->get_table())->where(['id' => $id])->for_update()->one();
-            } else
-            {
+            } else {
                 $this->data = App::get_ci()->s->from($this->get_table())->where(['id' => $id])->one();
             }
-            if ( ! empty($this->data))
-            {
+
+            if ($this->data !== null) {
                 $this->map_sql_to_class();
-            } else
-            {
+            } else {
                 throw new EmeraldModelNoDataException('No data with this id!:' . $id);
             }
-        } else
-        {
-            if ( ! is_null($id))
+        } else {
+            if (!is_null($id))
             {
                 throw new EmeraldModelNoDataException('Id error!');
             }

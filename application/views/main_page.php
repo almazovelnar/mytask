@@ -185,12 +185,12 @@ use Model\User_model;
                   <span>{{likes}}</span>
                 </div>
               </div>
-              <p class="card-text" v-for="comment in post.coments"> {{comment.user.personaname + ' - '}}<small class="text-muted">{{comment.text}}</small></p>
+              <p class="card-text" v-for="comment in post.coments" > {{comment.user.personaname + ' - '}}<small class="text-muted">{{comment.text}}</small></p>
               <form class="form-inline">
                 <div class="form-group">
                   <input type="text" class="form-control" id="addComment" v-model="commentText">
                 </div>
-                <button type="submit" class="btn btn-primary">Add comment</button>
+                <button type="button" class="btn btn-primary" @click="createComment(post.id, commentText)">Add comment</button>
               </form>
             </div>
           </div>

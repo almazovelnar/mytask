@@ -94,10 +94,11 @@ var app = new Vue({
 			}
 		},
 		openPost: function (id) {
-			var self= this;
+			var self = this;
 			axios
 				.get('/main_page/get_post/' + id)
 				.then(function (response) {
+					console.log(response)
 					self.post = response.data.post;
 					if(self.post){
 						setTimeout(function () {
@@ -127,6 +128,19 @@ var app = new Vue({
 							$('#amountModal').modal('show');
 						}, 500);
 					}
+				})
+		},
+		createComment: function (id, commentText) {
+			var self= this;
+			axios.post('/main_page/comment', {
+				id: id,
+				commentText: commentText,
+			})
+				.then(function (response) {
+					setTimeout(function () {
+						self.post = response.data.post
+						self.commentText = ''
+					}, 250);
 				})
 		}
 	}
