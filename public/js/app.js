@@ -10,7 +10,7 @@ var app = new Vue({
 		userNotFound: false,
 		posts: [],
 		addSum: 1,
-		amount: 0,
+		amount: null,
 		likes: null,
 		postLikes: 0,
 		balance: null,
@@ -130,8 +130,11 @@ var app = new Vue({
 				id: id,
 			})
 				.then(function (response) {
-					self.amount = response.data.amount
-					if(self.amount !== 0){
+					if(response.data.status === 'success'){
+						self.amount = response.data.amount
+						self.likes = response.data.likes
+						self.balance = response.data.balance
+
 						setTimeout(function () {
 							$('#amountModal').modal('show');
 						}, 500);

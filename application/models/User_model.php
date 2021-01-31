@@ -16,7 +16,6 @@ use CI_Emerald_Model;
 class User_model extends CI_Emerald_Model {
     const CLASS_TABLE = 'user';
 
-
     /** @var string */
     protected $email;
     /** @var string */
@@ -41,7 +40,6 @@ class User_model extends CI_Emerald_Model {
     protected $time_updated;
     /** @var integer */
     protected $likes;
-
 
 
     private static $_current_user;
@@ -421,6 +419,14 @@ class User_model extends CI_Emerald_Model {
     public function minusFromLikes($like = 1)
     {
         $this->likes -= $like;
+        $this->save('likes', $this->likes);
+
+        return $this->getLikes();
+    }
+
+    public function addToLikes($like = 1)
+    {
+        $this->likes += $like;
         $this->save('likes', $this->likes);
 
         return $this->getLikes();

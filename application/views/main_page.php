@@ -2,10 +2,6 @@
 
 use Model\User_model;
 
-/**
- * @var User_model $user
- */
-
 ?>
 <!doctype html>
 <html lang="en">
@@ -48,7 +44,7 @@ use Model\User_model;
               <span style="color:#fff;">
                       <span style="margin-left: 30px;">Balance: </span>
                       <span v-if="balance === null"><?= "$" . $user->balance ?></span>
-                      <span v-else>{{balance}}</span>
+                      <span v-else>${{balance}}</span>
 
                         <svg style="position:relative; top: -1.5px; margin-left: 10px;" class="bi bi-heart-fill" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                           <path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z" clip-rule="evenodd"/>

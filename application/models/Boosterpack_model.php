@@ -127,4 +127,11 @@ class Boosterpack_model extends CI_Emerald_Model {
         return (App::get_ci()->s->get_affected_rows() > 0);
     }
 
+    public function addToBank(float $amount)
+    {
+        $this->bank += $amount;
+        $this->save('bank', $this->bank);
+
+        return number_format($this->get_bank(), 2);
+    }
 }
