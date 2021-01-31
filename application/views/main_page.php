@@ -2,6 +2,10 @@
 
 use Model\User_model;
 
+/**
+ * @var User_model $user
+ */
+
 ?>
 <!doctype html>
 <html lang="en">
@@ -28,7 +32,7 @@ use Model\User_model;
         <li class="nav-item">
             <?php  if (User_model::is_logged()) { ?>
               <a href="/main_page/logout" class="btn btn-primary my-2 my-sm-0"
-                 data-target="#loginModal">Log out, <?= $user->personaname?>
+                 data-target="#loginModal">Log out, <?= $user->personaname ?>
               </a>
             <?php } else {?>
               <button type="button" class="btn btn-success my-2 my-sm-0" type="submit" data-toggle="modal"
@@ -41,6 +45,12 @@ use Model\User_model;
               <button type="button" class="btn btn-success my-2 my-sm-0" type="submit" data-toggle="modal"
                       data-target="#addModal">Add balance
               </button>
+              <span style="color:#fff;margin-left: 30px;">
+                    <svg style="position:relative; top: -1.5px;" class="bi bi-heart-fill" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                      <path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z" clip-rule="evenodd"/>
+                    </svg>
+                  <?= $user->balance ?>
+              </span>
             <?php }?>
         </li>
       </div>
@@ -188,12 +198,14 @@ use Model\User_model;
               <p class="card-text" v-for="comment in post.coments" >
                   {{comment.user.personaname + ' - '}}<small class="text-muted">{{comment.text}}</small>
               </p>
-              <form class="form-inline">
-                <div class="form-group">
-                  <input type="text" class="form-control" id="addComment" v-model="commentText">
-                </div>
-                <button type="button" class="btn btn-primary" @click="createComment(post.id, commentText)">Add comment</button>
-              </form>
+                <?php if(User_model::is_logged()): ?>
+                    <form class="form-inline">
+                        <div class="form-group">
+                            <input type="text" class="form-control" id="addComment" v-model="commentText">
+                        </div>
+                        <button type="button" class="btn btn-primary" @click="createComment(post.id, commentText)">Add comment</button>
+                    </form>
+                <?php endif ?>
             </div>
           </div>
         </div>
@@ -226,7 +238,7 @@ use Model\User_model;
           </form>
         </div>
         <div class="modal-footer">
-          <button type="submit" class="btn btn-success" @click="fiilIn">Add</button>
+          <button type="submit" class="btn btn-success" @click="fillIn">Add</button>
         </div>
       </div>
     </div>

@@ -377,6 +377,7 @@ class User_model extends CI_Emerald_Model {
 
             $o->time_created = $data->get_time_created();
             $o->time_updated = $data->get_time_updated();
+            $o->balance = number_format($data->get_wallet_balance(), 2);
         }
 
         return $o;
@@ -390,5 +391,19 @@ class User_model extends CI_Emerald_Model {
             return new User_model($user);
 
         return $user;
+    }
+
+    public function addToBalance(float $amount): float
+    {
+        $this->wallet_balance += $amount;
+        $this->save('wallet_balance', $this->wallet_balance);
+        return $this->get_wallet_balance();
+    }
+
+    public function addToRefilled(float $amount): float
+    {
+        $this->wallet_total_refilled += $amount;
+        $this->save('wallet_total_refilled', $this->wallet_total_refilled);
+        return $this->get_wallet_total_refilled();
     }
 }
