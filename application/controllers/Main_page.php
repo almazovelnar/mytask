@@ -124,15 +124,14 @@ class Main_page extends MY_Controller
         return $this->response_success(['amount' => rand(1,55)]);
     }
 
-
     public function like(){
         if (!User_model::is_logged())
             return $this->response_error(CI_Core::RESPONSE_GENERIC_NEED_AUTH);
 
-        $likes = 1;
+        $like = 1;
         $user = User_model::get_user();
-        if ($user->get_wallet_balance() - $likes < 0)
-            return $this->response_error(CI_Core::RESPONSE_BALANCE_NOT_ENOUGH);
+        if ($user->getLikes() - $like < 0)
+            return $this->response_error(CI_Core::RESPONSE_LIKES_NOT_ENOUGH);
 
         $data = json_decode(file_get_contents('php://input'));
         $postId = intval($data->id);
@@ -146,17 +145,14 @@ class Main_page extends MY_Controller
             return $this->response_error(CI_Core::RESPONSE_GENERIC_NO_DATA);
         }
 
-
-        if ($post->like($likes))
-            $balance = $user->minusFromBalance($likes);
+        if ($post->like($like))
+            $likes = $user->minusFromLikes($like);
 
         $posts =  Post_model::preparation($post, 'full_info');
 
-
         return $this->response_success([
             'post' => $posts,
-            'balance' => $balance ?? 0
+            'likes' => $likes ?? 0
         ]);
     }
-
 }

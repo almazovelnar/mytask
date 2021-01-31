@@ -11,8 +11,9 @@ var app = new Vue({
 		posts: [],
 		addSum: 1,
 		amount: 0,
-		likes: 0,
-		balance: 0,
+		likes: null,
+		postLikes: 0,
+		balance: null,
 		commentText: '',
 		packs: [
 			{
@@ -101,7 +102,6 @@ var app = new Vue({
 			axios
 				.get('/main_page/get_post/' + id)
 				.then(function (response) {
-					console.log(response)
 					self.post = response.data.post;
 					if(self.post){
 						setTimeout(function () {
@@ -118,8 +118,8 @@ var app = new Vue({
 				})
 				.then(function (response) {
 					if (response.data.status === 'success') {
-						self.balance = response.data.balance;
-						self.likes = response.data.post.likes;
+						self.likes = response.data.likes;
+						self.postLikes = response.data.post.likes;
 					}
 				})
 
