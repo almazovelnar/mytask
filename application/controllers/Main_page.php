@@ -60,6 +60,7 @@ class Main_page extends MY_Controller
 
         $postId = intval($data->id);
         $message = $data->commentText;
+        $parentId = $data->parentId ?? null;
 
         if (empty($postId) || empty($message)){
             return $this->response_error(CI_Core::RESPONSE_GENERIC_WRONG_PARAMS);
@@ -71,7 +72,7 @@ class Main_page extends MY_Controller
             return $this->response_error(CI_Core::RESPONSE_GENERIC_NO_DATA);
         }
 
-        $comment = $post->comment(User_model::get_user()->get_id(), $postId, $message);
+        $post->comment(User_model::get_user()->get_id(), $postId, $message, $parentId);
 
         $posts =  Post_model::preparation($post, 'full_info');
         return $this->response_success(['post' => $posts]);
@@ -108,6 +109,9 @@ class Main_page extends MY_Controller
     public function add_money(){
         if (!User_model::is_logged())
             return $this->response_error(CI_Core::RESPONSE_GENERIC_NEED_AUTH);
+
+        var_dump($this->input->post());die;
+
 
         $data = json_decode(file_get_contents('php://input'));
 

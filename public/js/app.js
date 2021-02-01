@@ -5,15 +5,17 @@ var app = new Vue({
 		pass: '',
 		post: false,
 		invalidLogin: false,
+		commentUser: null,
 		invalidPass: false,
 		invalidSum: false,
 		userNotFound: false,
 		posts: [],
-		addSum: 1,
+			addSum: 1,
 		amount: null,
 		likes: null,
 		postLikes: 0,
 		commentLikes: 0,
+		commentId: null,
 		balance: null,
 		commentText: '',
 		packs: [
@@ -33,8 +35,7 @@ var app = new Vue({
 	},
 	computed: {
 		test: function () {
-			var data = [];
-			return data;
+			return [];
 		}
 	},
 	created(){
@@ -80,7 +81,7 @@ var app = new Vue({
 			}
 		},
 		fillIn: function () {
-			var self = this;
+			let self = this;
 			if(self.addSum === 0){
 				self.invalidSum = true
 			} else{
@@ -89,17 +90,18 @@ var app = new Vue({
 					sum: self.addSum,
 				})
 					.then(function (response) {
-						setTimeout(function () {
-							$('#addModal').modal('hide');
-							setTimeout(function () {
-								location.reload()
-							}, 500);
-						}, 300);
+						console.log(response)
+						// setTimeout(function () {
+						// 	$('#addModal').modal('hide');
+						// 	setTimeout(function () {
+						// 		location.reload()
+						// 	}, 500);
+						// }, 300);
 					})
 			}
 		},
 		openPost: function (id) {
-			var self = this;
+			let self = this;
 			axios
 				.get('/main_page/get_post/' + id)
 				.then(function (response) {
@@ -112,7 +114,7 @@ var app = new Vue({
 				})
 		},
 		addLike: function (id) {
-			var self = this;
+			let self = this;
 			axios
 				.post('/main_page/like', {
 					id: id
@@ -126,7 +128,7 @@ var app = new Vue({
 
 		},
 		addCommentLike: function (id) {
-			var self = this;
+			let self = this;
 			axios
 				.post('/main_page/comment_like', {
 					id: id
@@ -140,7 +142,7 @@ var app = new Vue({
 
 		},
 		buyPack: function (id) {
-			var self= this;
+			let self= this;
 			axios.post('/main_page/buy_boosterpack', {
 				id: id,
 			})
@@ -156,17 +158,22 @@ var app = new Vue({
 					}
 				})
 		},
-		createComment: function (id, commentText) {
-			var self= this;
+		createComment: function (id, commentText, parentId = 0) {
+			let self= this;
+			console.log(parentId)
 			axios.post('/main_page/comment', {
 				id: id,
 				commentText: commentText,
+				parentId: parentId,
 			})
 				.then(function (response) {
-					setTimeout(function () {
-						self.post = response.data.post
-						self.commentText = ''
-					}, 250);
+					if (commentText !== '') {
+						setTimeout(function () {
+							console.log(response)
+							self.post = response.data.post
+							self.commentText = ''
+						}, 250);
+					}
 				})
 		}
 	}

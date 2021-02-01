@@ -35,6 +35,8 @@ class Comment_model extends CI_Emerald_Model
     protected $comments;
     protected $likes;
     protected $user;
+    protected $parent_id;
+    protected $children;
 
 
     /**
@@ -247,6 +249,7 @@ class Comment_model extends CI_Emerald_Model
             $o->user = User_model::preparation($d->get_user(),'main_page');
 
             $o->likes = $d->get_likes();
+            $o->parentId = $d->getParentId();
 
             $o->time_created = $d->get_time_created();
             $o->time_updated = $d->get_time_updated();
@@ -266,4 +269,22 @@ class Comment_model extends CI_Emerald_Model
         return $this->get_likes();
     }
 
+    /**
+     * @return mixed
+     */
+    public function getParentId()
+    {
+        return $this->parent_id;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getChildren($parentId)
+    {
+        return App::get_ci()->s->from(self::CLASS_TABLE)
+            ->where(['parent_id' => $parentId])
+            ->orderBy('time_created','ASC')
+            ->many();
+    }
 }

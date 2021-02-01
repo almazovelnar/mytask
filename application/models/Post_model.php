@@ -287,7 +287,8 @@ class Post_model extends CI_Emerald_Model {
         $o->img = $data->get_img();
 
         $o->user = User_model::preparation($data->get_user(), 'main_page');
-        $o->coments = Comment_model::preparation($data->get_comments(), 'full_info');
+        $o->coments = self::buildCommentsTree(Comment_model::preparation($data->get_comments(), 'full_info'));
+
         $o->likes = $data->get_likes();
 
         $o->time_created = $data->get_time_created();
@@ -297,6 +298,22 @@ class Post_model extends CI_Emerald_Model {
 
 
         return $o;
+    }
+
+    private static function buildCommentsTree($comments, $parentId = 0)
+    {
+
+        $resultComments = [];
+        $parentComments = array_filter($comments, function ($comment) use ($parentId) {
+            return $comment->parentId == $parentId;
+        });
+
+        foreach ($parentComments as $parent) {
+            $parent->children = self::buildCommentsTree($comments, $parent->id);
+            $resultComments[$parent->id] = $parent;
+        }
+
+        return $resultComments;
     }
 
     public function like($like = 1)
