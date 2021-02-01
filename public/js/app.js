@@ -90,13 +90,12 @@ var app = new Vue({
 					sum: self.addSum,
 				})
 					.then(function (response) {
-						console.log(response)
-						// setTimeout(function () {
-						// 	$('#addModal').modal('hide');
-						// 	setTimeout(function () {
-						// 		location.reload()
-						// 	}, 500);
-						// }, 300);
+						 setTimeout(function () {
+						 	$('#addModal').modal('hide');
+						 	setTimeout(function () {
+						 		location.reload()
+						 	}, 500);
+						 }, 300);
 					})
 			}
 		},
