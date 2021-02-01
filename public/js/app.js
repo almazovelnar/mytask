@@ -169,7 +169,6 @@ var app = new Vue({
 				.then(function (response) {
 					if (commentText !== '') {
 						setTimeout(function () {
-							console.log(response)
 							self.post = response.data.post
 							self.commentText = ''
 						}, 250);
