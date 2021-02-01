@@ -110,9 +110,6 @@ class Main_page extends MY_Controller
         if (!User_model::is_logged())
             return $this->response_error(CI_Core::RESPONSE_GENERIC_NEED_AUTH);
 
-        var_dump($this->input->post());die;
-
-
         $data = json_decode(file_get_contents('php://input'));
 
         $amount = doubleval($data->sum);
